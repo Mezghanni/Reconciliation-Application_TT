@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<secured attributes="ROLE_USER"/>
+
+	<var name="uiUtils" class="com.tt.ui.utils.UIUtils"/>
+
+	<on-start>
+		<evaluate expression="userService.loadUserEntityByUsername(currentUser.name)" result="flowScope.user" />
+	</on-start>
+
+	<view-state id="home" view="accountHome.xhtml">
+	<transition on="nextStep" to="next" />
+	</view-state>
+	
+	<view-state id="next" view="nextStep.xhtml">
+	<transition on="reconcStep" to="reconc"/>
+	<transition on="back" to="home"/>
+	</view-state>
+	
+	<view-state id="reconc" view="reconcStep.xhtml">
+	<transition on="resultStep" to="result"/>
+	<transition on="back" to="home"/>
+	</view-state>
+
+	<view-state id="result" view="resultStep.xhtml">
+	<transition on="back" to="home"/>
+	<transition on="down" to="result"/>
+	</view-state>
+	
+</flow>

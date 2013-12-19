@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/general.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="My Account Home" />
+	</ui:define>
+	<ui:define name="header">
+		<h:outputText value="My Account Home" />
+	</ui:define>
+
+	<ui:define name="content">
+		<f:metadata>
+			<f:event type="postAddToView" listener="#{uiUtils.greetOnViewLoad}"
+				update="growlMessages" />
+			<f:attribute name="firstName" value="#{user.firstName}" />
+			<f:attribute name="lastName" value="#{user.lastName}" />
+		</f:metadata>
+
+		<h1>Account for #{user.firstName} #{user.lastName}</h1>
+
+		<h:form id="uploadForm" >
+			<p:fieldset styleClass="fieldset" legend="Upload Form">
+				<p:focus />
+				<p:messages id="messages" globalOnly="true" />
+
+				<h:panelGrid id="upPanelGrid"
+					style="margin: 0 auto; margin-top: 25px; text-align: right"
+					cellspacing="8" columns="2">
+					
+					<p:fileUpload id="file1" 
+						label="Choose TT CDR File" cancelLabel="Cancel Upload" 
+						fileUploadListener="#{uiUtils.cdrTTUpload}"
+						mode="advanced" dragDropSupport="true" update="msg"
+						sizeLimit="99999999" allowTypes="/(\.|\/)(txt|csv)$/" 
+						oncomplete="this.disable()" />
+					<p:growl id="msg" showDetail="true"/>
+					<h:panelGroup>
+					<p:commandButton id="Truncate" value="Clear CDR TT Table" 
+						 icon="ui-icon-closethick" actionListener="#{uiUtils.truncateCdrTT}" immediate="true" />
+					<p:commandButton id="Submitt" value="Next Step" 
+						update="upPanelGrid,messages" icon="ui-icon-check"  action="nextStep" immediate="true" />
+					
+					</h:panelGroup>
+					
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

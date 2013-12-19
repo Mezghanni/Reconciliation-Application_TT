@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<import resource="datasource-config.xml" />
+	<import resource="webflow-config.xml" />	
+	<import resource="security-config.xml" />
+	
+	<!-- DAO declarations -->
+	<bean id="userDao" class="com.tt.dao.UserJpaDao" />
+	<bean id="cdrTTDao" class="com.tt.dao.CdrTTJpaDao" />
+	<bean id="cdrTiersDao" class="com.tt.dao.CdrTiersJpaDao" />
+	<bean id="cdrReconcDao" class="com.tt.dao.CdrReconcJpaDao" />
+	
+	<!-- Services declarations -->
+	<bean id="userService" class="com.tt.services.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	<bean id="cdrTTService" class="com.tt.services.impl.CdrTTServiceImpl">
+		<property name="cdrTTDao" ref="cdrTTDao" />
+	</bean>
+	<bean id="cdrTiersService" class="com.tt.services.impl.CdrTiersServiceImpl">
+		<property name="cdrTiersDao" ref="cdrTiersDao" />
+	</bean>
+	<bean id="cdrReconcService" class="com.tt.services.impl.CdrReconcServiceImpl">
+		<property name="cdrReconcDao" ref="cdrReconcDao" />
+	</bean>
+	
+	<!-- User Interface declarations -->
+	<bean id="uiUtils" class="com.tt.ui.utils.UIUtils">
+		<property name="cdrTTService" ref="cdrTTService" />
+		<property name="cdrTiersService" ref="cdrTiersService" />
+		<property name="cdrReconcService" ref="cdrReconcService" />
+	</bean>
+	<bean id="userAuthenticationProviderService" class="com.tt.services.impl.UserAuthenticationProviderServiceImpl">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+	
+</beans>
